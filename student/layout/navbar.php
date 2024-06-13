@@ -1,5 +1,10 @@
 <?php 
-	session_start()
+	session_start();
+
+	
+if(!$_SESSION['matric_no']) {
+	header("Location: ./login.php");
+}
 ?>
 
 <div class="header">
@@ -54,11 +59,11 @@
 							<?php echo $_SESSION['l_name'] ?>
 						</span>
 					</a>
-					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+					<form action="../server/student/logout.php" method="post" class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="profile.php"><i class="dw dw-settings2"></i> Setting</a>
 						<a class="dropdown-item" href="faq.php"><i class="dw dw-help"></i> Help</a>
-						<a class="dropdown-item" href="login.php"><i class="dw dw-logout"></i> Log Out</a>
-					</div>
+						<button type="submit" name="logout" id="logout" class="dropdown-item"><i class="dw dw-logout"></i> Log Out</button>
+					</form>
 				</div>
 			</div>
 			<div class="github-link" style="width: 30px;">

@@ -1,4 +1,5 @@
 <?php
+include '../server/database.php';
 
 $title = "DeskApp - Bootstrap Admin Dashboard HTML Template";
 $links = array(
@@ -9,6 +10,25 @@ $links = array(
 require_once './layout/header.php';
 include './layout/navbar.php';
 include './layout/sidebar.php';
+
+
+if(!$_SESSION['matric_no']) {
+	header("Location: ./login.php");
+}
+
+$matric_no = $_SESSION['matric_no'];
+
+$sql = "SELECT clearance_type, date, status, feedback FROM clearance WHERE student_matric = '$matric_no'";
+$result = $conn->query($sql);
+// if($conn->query($sql) === TRUE) {
+// 	$result = $conn->query($sql);
+// } else {
+
+// 	echo "Error: ". $sql. "<br>". $conn->error;
+// 	$result = [];
+// }
+
+
 ?>
 
 	<div class="main-container">
@@ -31,12 +51,27 @@ include './layout/sidebar.php';
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td class="table-plus">1</td>
-								<td>Library Clearance</td>
-								<td>20-10-2024</td>
+							<?php if ($result->num_rows > 0) :
+								$i = 1;
+								?>
+								<?php while($row = $result->fetch_assoc()):?>
+									<tr>
+								<td class="table-plus"><?php echo $i++; ?></td>
+								<td><?php echo $row['clearance_type'] ?></td>
+								<td><?php echo ($row['date']) ?></td>
 								<td class="row" style="align-items: center;">
-									<div class="make-badge" style="background-color: green;"> </div> Approved
+									<div class="make-badge" style="<?php 
+									if($row['status'] == "pending") {
+										echo "background-color: yellow;";
+									}
+									if($row['status'] == "success") {
+										echo "background-color: green;";
+									}
+									if($row['status'] == "rejected") {
+										echo "background-color: tomato;";
+									}
+									 
+									?>"> </div> <?php echo $row['status'] ?>
 								</td>
 								<td>
 									<a href="#" data-toggle="modal" data-target="#library_clearance">
@@ -99,94 +134,16 @@ include './layout/sidebar.php';
 									<!-- MODEL ENDS -->
 								</td>
 								<td class="text-center">
-									Cleared Successfully
+								<?php echo $row['feedback'] ?>
 								</td>
 							</tr>
-							<tr>
-								<td class="table-plus">2</td>
-								<td>Sport Clearance</td>
-								<td>20-10-2024</td>
-								<td class="row" style="align-items: center;">
-									<div class="make-badge" style="background-color: yellow;"> </div> Pending
-								</td>
-								<td>
-
-									<a href="#" data-toggle="modal" data-target="#library_clearance">
-										<i class="icon-copy bi bi-file-earmark-richtext" style="font-size: 25px;"></i>
-									</a>
-
-
-									<!-- MODEL START -->
-
-									<div class="modal fade library_clearance" id="library_clearance" tabindex="-1"
-										role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-										<div class="modal-dialog modal-lg modal-dialog-centered">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h4 class="modal-title" id="myLargeModalLabel">
-														Clearance Info
-													</h4>
-													<button type="button" class="close" data-dismiss="modal"
-														aria-hidden="true">
-														×
-													</button>
-												</div>
-												<div class="modal-body">
-													<div class="form-group row">
-														<label class="col-sm-3 col-form-label">Matric No:</label>
-														<div class="col-sm-9">
-															<input type="text" disabled value="Sport Clearance"
-																class="form-control" />
-														</div>
-													</div>
-													<div class="form-group row">
-														<label class="col-sm-3 col-form-label">Upload Library ID Card
-															1</label>
-														<div class="col-sm-9">
-															<input type="file" class="form-control" />
-														</div>
-													</div>
-													<div class="form-group row">
-														<label class="col-sm-3 col-form-label">Upload Library ID Card
-															2</label>
-														<div class="col-sm-9">
-															<input type="file" class="form-control" />
-														</div>
-													</div>
-												</div>
-												<div class="modal-footer">
-													<button type="button" class="btn btn-secondary"
-														data-dismiss="modal">
-														Close
-													</button>
-													<a href="student-dashboard.html" class="text-white">
-														<button type="button" class="btn btn-primary">Applied</button>
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<!-- MODEL ENDS -->
-								</td>
-								<td class="text-center">
-									Pending
-								</td>
-							</tr>
-							<tr>
-								<td class="table-plus">3</td>
-								<td>Sport Clearance</td>
-								<td>20-10-2024</td>
-								<td class="row" style="align-items: center;">
-									<div class="make-badge" style="background-color: tomato;"> </div> Rejected
-								</td>
-								<td>
-									<i class="icon-copy bi bi-file-earmark-richtext" style="font-size: 25px;"></i>
-								</td>
-								<td class="text-center">
-									Please reapply it again
-								</td>
-							</tr>
+								<?php endwhile; ?>
+								<?php else : ?>
+									<tr>
+										<td colspan="6">You've not submitted any clearance...</td>
+									</tr>
+							<?php endif; ?>
+						
 						</tbody>
 					</table>
 				</div>
