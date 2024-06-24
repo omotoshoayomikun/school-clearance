@@ -5088,3 +5088,6 @@ body.IE .register-page-wrap .container {
     box-shadow: 0 0 5px red !important;
 }
 
+.ds_none {
+    display: none;
+}

@@ -1,10 +1,10 @@
 <?php 
-	session_start();
+// 	session_start();
 
 	
-if(!$_SESSION['matric_no']) {
-	header("Location: ./login.php");
-}
+// if(!$_SESSION['matric_no']) {
+// 	header("Location: ./login.php");
+// }
 ?>
 
 <div class="header">

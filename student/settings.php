@@ -3,6 +3,9 @@ include '../server/database.php';
 session_start();
 
 $matric_no = $_SESSION['matric_no'];
+if(!$_SESSION['matric_no']) {
+	header("Location: ./login.php");
+}
 
 
 $title = "DeskApp - Bootstrap Admin Dashboard HTML Template";
@@ -19,9 +22,7 @@ $sql = "SELECT * FROM students_info WHERE matric_no = '$matric_no'";
 
 $result = $conn->query($sql);
 
-if(!$_SESSION['matric_no']) {
-	header("Location: ./login.php");
-}
+
 
 ?>
 
@@ -79,7 +80,7 @@ if(!$_SESSION['matric_no']) {
 							<div class="col-sm-2">Password: </div>
 							<div class="col-sm-2">***********</div>
 							<div class="col-sm-4">
-								<a href="" class="text-secondary" style="text-decoration: underline;">change</a>
+								<a href="../reset-password.php" class="text-secondary" style="text-decoration: underline;">change</a>
 							</div>
 						</div>
 					</div>

@@ -1,6 +1,6 @@
 <?php
 
-$title = "DeskApp - Bootstrap Admin Dashboard HTML Template";
+$title = "Student Registration";
 $bodyStyle = "login-page";
 $links = array(
 	0 => array("rel" => "apple-touch-icon", "sizes" => "180x180", "href" => "../vendors/images/apple-touch-icon.png", "type" => ""),
@@ -82,7 +82,7 @@ require_once './layout/header.php';
 								<div class="col-sm-8">
 									<div class="custom-control custom-radio custom-control-inline pb-0" style="display: none">
 										<input type="radio" id="" value="" name="gender" class="custom-control-input" checked />
-										<label class="custom-control-label" for="male">Male</label>
+										<label class="custom-control-label" for="male"></label>
 									</div>
 									<div class="custom-control custom-radio custom-control-inline pb-0">
 										<input type="radio" id="male" value="male" name="gender" class="custom-control-input" />

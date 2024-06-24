@@ -5,7 +5,7 @@ include '../server/database.php';
 $matric_no = $_SESSION['matric_no'];
 $disabled = "";
 
-$sql = "SELECT status FROM clearance WHERE student_matric = '$matric_no' AND clearance_type = 'hod' AND (status = 'pending' OR status = 'success')";
+$sql = "SELECT status FROM clearance WHERE student_matric = '$matric_no' AND clearance_type = 'hod' AND (status = 'pending' OR status = 'approved')";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
 	$disabled = "disabled";

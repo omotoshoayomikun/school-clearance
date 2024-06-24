@@ -65,7 +65,7 @@
                 contentType: false,
                 success: function(response) {
                     if (response.split(" ")[0].includes('success')) {
-                        $("#uploadForm")[0].reset();
+                        $("#libraryForm")[0].reset();
                         window.location.href = 'student-dashboard.php';
                     } else {
                         $('#form_message_library').html(response);

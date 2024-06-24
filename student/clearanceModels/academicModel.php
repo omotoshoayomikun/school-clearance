@@ -71,7 +71,7 @@
                 <button type="button" name="" id="" class="btn btn-secondary" data-dismiss="modal">
                     Close
                 </button>
-                <a href="student-dashboard.html" class="text-white">
+                <a href="" class="text-white">
                     <button type="submit" name="academic" id="academic" value="academic" class="btn btn-primary">Applied</button>
                 </a>
             </div>

@@ -1,5 +1,13 @@
 <?php
 
+
+session_start();
+
+	
+if(!$_SESSION['matric_no']) {
+	header("Location: ./login.php");
+}
+
 $title = "DeskApp - Bootstrap Admin Dashboard HTML Template";
 $links = array(
 
@@ -9,6 +17,9 @@ $links = array(
 require_once './layout/header.php';
 include './layout/navbar.php';
 include './layout/sidebar.php';
+
+
+
 ?>
 
 <div class="main-container">
@@ -30,9 +41,6 @@ include './layout/sidebar.php';
 		?>
 		<?php
 		include './ClearanceView/bursary.php';
-		?>
-		<?php
-		include './ClearanceView/sport.php';
 		?>
 		<?php
 		include './ClearanceView/sport.php';

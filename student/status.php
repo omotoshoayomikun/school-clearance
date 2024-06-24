@@ -1,6 +1,13 @@
 <?php
 include '../server/database.php';
 
+session_start();
+
+	
+if(!$_SESSION['matric_no']) {
+	header("Location: ./login.php");
+}
+
 $title = "DeskApp - Bootstrap Admin Dashboard HTML Template";
 $links = array(
 
@@ -64,7 +71,7 @@ $result = $conn->query($sql);
 									if($row['status'] == "pending") {
 										echo "background-color: yellow;";
 									}
-									if($row['status'] == "success") {
+									if($row['status'] == "approved") {
 										echo "background-color: green;";
 									}
 									if($row['status'] == "rejected") {
