@@ -4,6 +4,7 @@ include '../../database.php';
 session_start();
 
 $student_matric = $_SESSION['matric_no'];
+$student_department = $_SESSION['department'];
 
 function handleFileProcessing($file_fields, &$fileError, &$fileMsg, &$student_matric, &$uploaded_file)
 {
@@ -61,12 +62,25 @@ if (isset($_POST['submit_library'])) {
     if (in_array(true, $fileError)) {
         exit();
     } else {
-        $sql = "INSERT INTO clearance (student_matric,library_id_card, disc, clearance_form, status, clearance_type) VALUES ('$student_matric', '$uploaded_file[0]', '$uploaded_file[1]','$uploaded_file[2]', '$status', '$clearance_type')";
 
-        if ($conn->query($sql) === TRUE) {
-            echo "New record created successfully";
+        $sql = "SELECT * FROM clearance WHERE student_matric = '$student_matric' AND clearance_type = '$clearance_type' AND status = 'rejected'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $sql = "UPDATE clearance SET library_id_card = '$uploaded_file[0]', disc  = '$uploaded_file[1]', clearance_form = '$uploaded_file[2]',  status = '$status', feedback = ''  WHERE student_matric = '$student_matric'";
+            if ($conn->query($sql) === TRUE) {
+                echo "success";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+
+            $sql = "INSERT INTO clearance (student_matric,library_id_card, disc, clearance_form, status, clearance_type, department) VALUES ('$student_matric', '$uploaded_file[0]', '$uploaded_file[1]','$uploaded_file[2]', '$status', '$clearance_type', '$student_department')";
+
+            if ($conn->query($sql) === TRUE) {
+                echo "New record created successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
         }
     }
 }

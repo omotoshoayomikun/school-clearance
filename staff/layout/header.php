@@ -13,7 +13,7 @@ $scripts = isset($scripts) ? $scripts : [];
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8" />
-	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+	<title><?php echo $title ?></title>
 
 	<!-- Site favicon -->
 

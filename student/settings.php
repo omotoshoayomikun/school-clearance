@@ -8,7 +8,7 @@ if(!$_SESSION['matric_no']) {
 }
 
 
-$title = "DeskApp - Bootstrap Admin Dashboard HTML Template";
+$title = "Student - Settings";
 $links = array(
 
 	2 => array("rel" => "stylesheet", "sizes" => "", "href" => "src/plugins/datatables/css/dataTables.bootstrap4.min.css", "type" => "text/css"),
@@ -80,7 +80,7 @@ $result = $conn->query($sql);
 							<div class="col-sm-2">Password: </div>
 							<div class="col-sm-2">***********</div>
 							<div class="col-sm-4">
-								<a href="../reset-password.php" class="text-secondary" style="text-decoration: underline;">change</a>
+								<a href="./reset-password.php" class="text-secondary" style="text-decoration: underline;">change</a>
 							</div>
 						</div>
 					</div>

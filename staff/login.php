@@ -66,7 +66,7 @@ require_once './layout/header.php';
 									OR
 								</div>
 								<div class="input-group mb-0">
-									<a class="btn btn-outline-danger btn-lg btn-block" href="register.html">Register To Create Account</a>
+									<a class="btn btn-outline-danger btn-lg btn-block" href="register.php">Register To Create Account</a>
 								</div>
 							</div>
 						</div>

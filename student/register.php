@@ -20,7 +20,7 @@ require_once './layout/header.php';
 				<div class="register-box bg-white box-shadow border-radius-10">
 					<form action="" class="wizard-circle"></form>
 					<h5 class="mb-5">Basic Account Credentials</h5>
-					<form method="post" action="../server/student/registration.php" class="mt-3">
+					<form id="stu_reg" method="post" action="../server/student/registration.php" class="mt-3">
 						<div class="form-wrap max-width-600 mx-auto">
 							<div class="form-group row">
 								<label class="col-sm-4 col-form-label">Matric No*</label>
@@ -49,10 +49,64 @@ require_once './layout/header.php';
 							<div class="form-group row">
 								<label class="col-sm-4 col-form-label">Department*</label>
 								<div class="col-sm-8">
-									<select name="department" id="department" class="form-control" title="Select Department">
-										<option value="">Select Department</option>
-										<option value="computer science">Computer Science</option>
-									</select>
+								<select name="department" id="department" class="form-control selectpicker" title="Select Department">
+											<optgroup label="School of Applied Sciences">
+												<option value="Food Science and Technology">Food Science and Technology</option>
+												<option value="Statistics">Statistics</option>
+												<option value="Hospitality Management">Hospitality Management</option>
+												<option value="Geological Technology">Geological Technology</option>
+											</optgroup>
+											<optgroup label="School of Science and Technology">
+												<option value="Agricultural Technology">Agricultural Technology</option>
+												<option value="Science Laboratory Technology">Science Laboratory Technology</option>
+											</optgroup>
+											<optgroup label="School of Computing">
+												<option value="Computer Science">Computer Science</option>
+												<option value="⁠Artificial Intelligence">⁠Artificial Intelligence</option>
+												<option value="⁠Software and Web Development">⁠Software and Web Development</option>
+												<option value="Networking and Cloud Computing">Networking and Cloud Computing</option>
+												<option value="⁠Cybersecurity">⁠Cybersecurity</option>
+											</optgroup>
+											<optgroup label="School of Marketing">
+												<option value="Accountancy">Accountancy</option>
+												<option value="⁠Banking and Finance">Banking and Finance</option>
+												<option value="Insurance">⁠Insurance</option>
+											</optgroup>
+											<optgroup label="School of Administrative and Business Studies">
+												<option value="Business Administration">Business Administration</option>
+												<option value="Marketing">Marketing</option>
+												<option value="Procurement and Supply Chain Management">Procurement and Supply Chain Management</option>
+												<option value="Public Administration">Public Administration</option>
+												<option value="Local Government Studies">Local Government Studies</option>
+												<option value="Human Resources and Industrial Relation">Human Resources and Industrial Relation</option>
+											</optgroup>
+											<optgroup label="School of Communication and Media Studie">
+												<option value="Mass Communication">Mass Communication</option>
+											</optgroup>
+											<optgroup label="School of Information Technology">
+												<option value="Library and Information Science">Library and Information Science</option>
+												<option value="Office Technology Management">Office Technology Management</option>
+											</optgroup>
+											<optgroup label="School of Natural Resources Engineering">
+												<option value="Agricultural and Bio Environmental Engineering">Agricultural and Bio Environmental Engineering</option>
+												<option value="Civil Engineering">Civil Engineering</option>
+											</optgroup>
+											<optgroup label="School of Industrial Engineering Technology">
+												<option value="Computer Engineering Technology">Computer Engineering Technology</option>
+												<option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+												<option value="Mechatronics Engineering Technology">Mechatronics Engineering Technology</option>
+												<option value="Railway Engineering Technology">Railway Engineering Technology</option>
+												<option value="Renewable Engineering Technology">Renewable Engineering Technology</option>
+											</optgroup>
+											<optgroup label="School of Environmental Technology">
+												<option value="Architectural Technology">Architectural Technology</option>
+												<option value="Building Technology">Building Technology</option>
+												<option value="Quantity Surveying">Quantity Surveying</option>
+												<option value="Urban and Regional Planning">Urban and Regional Planning</option>
+												<option value="Estate Management and Valuation">Estate Management and Valuation</option>
+												<option value="Surveying and Geo - Informatics">Surveying and Geo - Informatics</option>
+											</optgroup>
+										</select>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -74,6 +128,8 @@ require_once './layout/header.php';
 										<option value="2023">2023</option>
 										<option value="2022">2022</option>
 										<option value="2021">2021</option>
+										<option value="2020">2020</option>
+										<option value="2019">2019</option>
 									</select>
 								</div>
 							</div>
@@ -115,7 +171,7 @@ require_once './layout/header.php';
 							<h2 class="text-danger text-center fs-1 fw-bold" id="form_message"></h2>
 							<div class="form-group mt-3">
 								<!-- <a href="student-dashboard.html"> -->
-								<button type="submit" name="submit" id="submit" class="btn btn-primary text-white form-control">Register</button>
+								<button type="submit" name="submit_stu" id="submit_stu" value="submit_stu" class="btn btn-primary text-white form-control">Register</button>
 								<!-- </a> -->
 							</div>
 						</div>
@@ -136,53 +192,29 @@ require_once './layout/header.php';
 </div>
 <script>
 	$(document).ready(function() {
-		$("form").submit(function(event) {
+		$("#stu_reg").submit(function(event) {
 			event.preventDefault();
-			var matric_no = $("#matric_no").val();
-			var f_name = $("#f_name").val();
-			var m_name = $("#m_name").val();
-			var l_name = $("#l_name").val();
-			var department = $("#department").val();
-			var level = $("#level").val();
-			var year = $("#year").val();
-			var gender = $('input[name="gender"]:checked').val();
-			var p_word = $("#p_word").val();
-			var confirm_password = $("#confirm_password").val();
-			var submit = $("#submit").val()
 
-			$('#form_message').load("../server/student/registration.php", {
-				matric_no: matric_no,
-				f_name: f_name,
-				m_name: m_name,
-				l_name: l_name,
-				department: department,
-				level: level,
-				year: year,
-				gender: gender,
-				p_word: p_word,
-				confirm_password: confirm_password,
-				submit: submit
-			}, function(response, status, xhr) {
-				if (status === "success") {
-					if (response.split(" ")[0].includes('success') ) {
+			var formData = new FormData(this);
+			formData.append('submit_stu', $("#submit_stu").val());
+
+			$.ajax({
+				url: "../server/student/registration.php",
+				type: "POST",
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function(response) {
+					if (response.split(" ")[0].includes('success')) {
+
 						$('#successModal').modal('show');
-						$("#matric_no").val('');
-						$("#f_name").val('');
-						$("#m_name").val('');
-						$("#l_name").val('');
-						$("#department").val('');
-						$("#level").val('');
-						$("#year").val('');
-						$('input[name="gender"]:checked').prop('checked', false); // Uncheck the radio button
-						$("#p_word").val('');
-						$("#confirm_password").val('');
-
-						$('#form_message').html('');
+						// window.location.href = 'student-dashboard.php';
 					} else {
 						$('#form_message').html(response);
 					}
-				} else {
-					$('#form_message').html(response);
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.log('AJAX error: ' + textStatus + ' : ' + errorThrown);
 				}
 			})
 		})

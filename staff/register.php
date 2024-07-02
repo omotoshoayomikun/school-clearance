@@ -51,7 +51,14 @@ require_once './layout/header.php';
 									<div class="col-sm-8">
 										<select name="unit" id="unit" class="form-control selectpicker" title="Select Unit">
 											<option value="library">Library</option>
-											<option value="hod">hod</option>
+											<option value="academic">Academic</option>
+											<option value="hod">Hod</option>
+											<option value="bursary">Bursary</option>
+											<option value="alumni">Alumni</option>
+											<option value="hostel">Hostel</option>
+											<option value="liasion">Liasion</option>
+											<option value="security">Security</option>
+											<option value="sport">Sport</option>
 										</select>
 									</div>
 								</div>
@@ -59,7 +66,62 @@ require_once './layout/header.php';
 									<label class="col-sm-4 col-form-label">Department*</label>
 									<div class="col-sm-8">
 										<select name="department" id="department" class="form-control selectpicker" title="Select Department">
-											<option value="Computer Science">Computer Science</option>
+											<optgroup label="School of Applied Sciences">
+												<option value="Food Science and Technology">Food Science and Technology</option>
+												<option value="Statistics">Statistics</option>
+												<option value="Hospitality Management">Hospitality Management</option>
+												<option value="Geological Technology">Geological Technology</option>
+											</optgroup>
+											<optgroup label="School of Science and Technology">
+												<option value="Agricultural Technology">Agricultural Technology</option>
+												<option value="Science Laboratory Technology">Science Laboratory Technology</option>
+											</optgroup>
+											<optgroup label="School of Computing">
+												<option value="Computer Science">Computer Science</option>
+												<option value="⁠Artificial Intelligence">⁠Artificial Intelligence</option>
+												<option value="⁠Software and Web Development">⁠Software and Web Development</option>
+												<option value="Networking and Cloud Computing">Networking and Cloud Computing</option>
+												<option value="⁠Cybersecurity">⁠Cybersecurity</option>
+											</optgroup>
+											<optgroup label="School of Marketing">
+												<option value="Accountancy">Accountancy</option>
+												<option value="⁠Banking and Finance">Banking and Finance</option>
+												<option value="Insurance">⁠Insurance</option>
+											</optgroup>
+											<optgroup label="School of Administrative and Business Studies">
+												<option value="Business Administration">Business Administration</option>
+												<option value="Marketing">Marketing</option>
+												<option value="Procurement and Supply Chain Management">Procurement and Supply Chain Management</option>
+												<option value="Public Administration">Public Administration</option>
+												<option value="Local Government Studies">Local Government Studies</option>
+												<option value="Human Resources and Industrial Relation">Human Resources and Industrial Relation</option>
+											</optgroup>
+											<optgroup label="School of Communication and Media Studie">
+												<option value="Mass Communication">Mass Communication</option>
+											</optgroup>
+											<optgroup label="School of Information Technology">
+												<option value="Library and Information Science">Library and Information Science</option>
+												<option value="Office Technology Management">Office Technology Management</option>
+											</optgroup>
+											<optgroup label="School of Natural Resources Engineering">
+												<option value="Agricultural and Bio Environmental Engineering">Agricultural and Bio Environmental Engineering</option>
+												<option value="Civil Engineering">Civil Engineering</option>
+											</optgroup>
+											<optgroup label="School of Industrial Engineering Technology">
+												<option value="Computer Engineering Technology">Computer Engineering Technology</option>
+												<option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+												<option value="Mechatronics Engineering Technology">Mechatronics Engineering Technology</option>
+												<option value="Railway Engineering Technology">Railway Engineering Technology</option>
+												<option value="Renewable Engineering Technology">Renewable Engineering Technology</option>
+											</optgroup>
+											<optgroup label="School of Environmental Technology">
+												<option value="Architectural Technology">Architectural Technology</option>
+												<option value="Building Technology">Building Technology</option>
+												<option value="Quantity Surveying">Quantity Surveying</option>
+												<option value="Urban and Regional Planning">Urban and Regional Planning</option>
+												<option value="Estate Management and Valuation">Estate Management and Valuation</option>
+												<option value="Surveying and Geo - Informatics">Surveying and Geo - Informatics</option>
+											</optgroup>
 										</select>
 									</div>
 								</div>
@@ -150,7 +212,6 @@ require_once './layout/header.php';
 				processData: false,
 				contentType: false,
 				success: function(response) {
-					console.log(response)
 					if (response.split(" ")[0].includes('success')) {
 						$("#staff_form")[0].reset();
 						$("#dep_toggle").css("display", "none");

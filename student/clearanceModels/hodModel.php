@@ -27,9 +27,9 @@
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">
 					Close
 				</button>
-				<a href="" class="text-white">
-					<button type="submit" name="submit" id="submit" value="submit" class="btn btn-primary">Applied</button>
-				</a>
+				<!-- <a href="" class="text-white"> -->
+					<button type="submit" name="submitHod" id="submitHod" value="submitHod" class="btn btn-primary">Applied</button>
+				<!-- </a> -->
 			</div>
 		</form>
 	</div>
@@ -43,8 +43,7 @@
             event.preventDefault();
             
             var formData = new FormData(this);
-            formData.append('submit', $('#submit').val());
-			console.log(formData.get('submit'));
+            formData.append('submitHod', $('#submitHod').val());
 
             $.ajax({
                 url: '../server/student/clearance/hod.php',
@@ -54,8 +53,8 @@
                 contentType: false,
                 success: function(response) {
                     if (response.split(" ")[0].includes('success')) {
-                        $("#uploadForm")[0].reset();
-                        window.location.href = 'student-dashboard.php';
+                        $("#hodForm")[0].reset();
+                        location.reload();
                     } else {
                         $('#form_message_hod').html(response);
                     }

@@ -32,6 +32,7 @@ if (isset($_POST['submit'])) {
                 $_SESSION['f_name'] = $user['f_name'];
                 $_SESSION['l_name'] = $user['l_name'];
                 $_SESSION['m_name'] = $user['m_name'];
+                $_SESSION['department'] = $user['department'];
                 echo "success";
                 exit();
             } else {

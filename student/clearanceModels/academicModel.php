@@ -99,8 +99,8 @@
                 contentType: false,
                 success: function(response) {
                     if (response.split(" ")[0].includes('success')) {
-                        $("#uploadForm")[0].reset();
-                        window.location.href = 'student-dashboard.php';
+                        $("#academicForm")[0].reset();
+                        location.reload();
                     } else {
                         $('#form_message').html(response);
                     }

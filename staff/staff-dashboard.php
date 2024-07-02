@@ -3,59 +3,100 @@
 include '../server/database.php';
 
 session_start();
-$matric_no = $_SESSION['matric_no'];
+$staff_id = $_SESSION['staff_id'];
+$staff_fname = $_SESSION['staff_f_name'];
+$staff_lname =  $_SESSION['staff_l_name'];
+$staff_unit = $_SESSION['staff_unit'];
+$staff_department = $_SESSION['staff_department'];
 
-	
-if(!$_SESSION['matric_no']) {
-	header("Location: ./login.php");
-}
+$title = "Staff Dashboard";
 
-$title = "Student Dashboard";
 $links = array(
-
 	2 => array("rel" => "stylesheet", "sizes" => "", "href" => "src/plugins/datatables/css/dataTables.bootstrap4.min.css", "type" => "text/css"),
 	5 => array("rel" => "stylesheet", "sizes" => "", "href" => "src/plugins/datatables/css/responsive.bootstrap4.min.css", "type" => "text/css"),
 );
 
+if (!$_SESSION['staff_id']) {
+	header("Location: ./login.php");
+}
 
 
-require_once './layout/header.php';
-include './layout/navbar.php';
-include './layout/sidebar.php';
-
+// TO GET THE NUMBERS OF ROWS FOR TOTAL
+if ($staff_unit === "hod") {
+	$sql = "SELECT id FROM clearance WHERE clearance_type = 'hod' AND department = '$staff_department'";
+	$totalResult = $conn->query($sql);
+	$totalRes = $totalResult->num_rows;
+} else {
+	$sql = "SELECT id FROM clearance WHERE clearance_type = '$staff_unit'";
+	$totalResult = $conn->query($sql);
+	$totalRes = $totalResult->num_rows;
+}
 
 // TO GET THE NUMBERS OF ROWS FOR PENDING
-$sql = "SELECT id FROM clearance WHERE student_matric = '$matric_no' AND status = 'pending'";
-$pendingResult = $conn->query($sql);
-$pendingRes = $pendingResult->num_rows;
+if ($staff_unit === "hod") {
+	$sql = "SELECT id FROM clearance WHERE clearance_type = 'hod' AND department = '$staff_department' AND status = 'pending'";
+	$pendingResult = $conn->query($sql);
+	$pendingRes = $pendingResult->num_rows;
+} else {
+	$sql = "SELECT id FROM clearance WHERE clearance_type = '$staff_unit' AND status = 'pending'";
+	$pendingResult = $conn->query($sql);
+	$pendingRes = $pendingResult->num_rows;
+}
+
 
 // TO GET THE NUMBERS OF ROWS FOR approved
-$sql = "SELECT id FROM clearance WHERE student_matric = '$matric_no' AND status = 'approved'";
-$approvedResult = $conn->query($sql);
-$approvedRes = $approvedResult->num_rows;
+if ($staff_unit === "hod") {
+	$sql = "SELECT id FROM clearance WHERE clearance_type = 'hod' AND department = '$staff_department' AND status = 'approved'";
+	$approvedResult = $conn->query($sql);
+	$approvedRes = $approvedResult->num_rows;
+} else {
+	$sql = "SELECT id FROM clearance WHERE clearance_type = '$staff_unit' AND status = 'approved'";
+	$approvedResult = $conn->query($sql);
+	$approvedRes = $approvedResult->num_rows;
+}
 
 // TO GET THE NUMBERS OF ROWS FOR REJECTED
-$sql = "SELECT id FROM clearance WHERE student_matric = '$matric_no' AND status = 'rejected'";
-$rejectedResult = $conn->query($sql);
-$rejectedRes = $rejectedResult->num_rows;
+if ($staff_unit === "hod") {
+	$sql = "SELECT id FROM clearance WHERE clearance_type = 'hod' AND department = '$staff_department' AND status = 'rejected'";
+	$rejectedResult = $conn->query($sql);
+	$rejectedRes = $rejectedResult->num_rows;
+} else {
+	$sql = "SELECT id FROM clearance WHERE clearance_type = '$staff_unit' AND status = 'rejected'";
+	$rejectedResult = $conn->query($sql);
+	$rejectedRes = $rejectedResult->num_rows;
+}
 
-// THIS IS FOR THE STATUS TABLE
-$sql = "SELECT * FROM clearance WHERE student_matric = '$matric_no'";
-$result = $conn->query($sql);
 
 // FOR THE CHARTS
 $data = [$approvedRes, $pendingRes, $rejectedRes];
 
 $data_json = json_encode($data);
 
+
+// THIS IS FOR THE HISTORY TABLE
+
+if ($staff_unit === "hod") {
+	$sql = "SELECT * FROM clearance WHERE clearance_type = 'hod' AND department = '$staff_department'";
+	$result = $conn->query($sql);
+} else {
+	$sql = "SELECT * FROM clearance WHERE clearance_type = '$staff_unit'";
+	$result = $conn->query($sql);
+}
+
+
+
+include "./layout/header.php";
+include "./layout/navbar.php";
+include "./layout/sidebar.php";
+
 ?>
 
-<!-- <div class="mobile-menu-overlay"></div> -->
+<div class="mobile-menu-overlay"></div>
 
-<div class="main-container" style="padding-top: 20px;">
+<div class="main-container">
 	<div class="xs-pd-20-10 pd-ltr-20">
 		<div class="title pb-20">
-			<h2 class="h3 mb-0">Welcome! <?php echo $_SESSION['matric_no']; ?></h2>
+			<h2 class="h3 mb-0">Welcome <?php echo $staff_fname . " " . $staff_lname ?></h2>
 		</div>
 
 		<div class="row pb-10">
@@ -63,7 +104,7 @@ $data_json = json_encode($data);
 				<div class="card-box height-100-p widget-style3">
 					<div class="d-flex flex-wrap">
 						<div class="widget-data">
-							<div class="weight-700 font-24 text-dark">9</div>
+							<div class="weight-700 font-24 text-dark"><?php echo $totalRes; ?></div>
 							<div class="font-14 text-secondary weight-500">
 								Total Clearance
 							</div>
@@ -146,7 +187,7 @@ $data_json = json_encode($data);
 					</div>
 					<!-- <div id="activities-chart"></div> -->
 					<div class="" style="height: 350px; align-self: center;">
-						<div id="chartDashboard" style="width: 450px;"></div>
+						<div id="chartDashboardstaff" style="width: 450px;"></div>
 					</div>
 				</div>
 			</div>
@@ -156,76 +197,65 @@ $data_json = json_encode($data);
 
 		</div>
 
-		<div class="card-box mb-30">
-			<div class="title ml-10 pb-4">
-				<h2 class="h3 mb-0">Check Status</h2>
-			</div>
-			<div class="pb-20 pt-4">
-				<table class="table-striped table stripe hover nowrap text-center">
-					<thead>
-						<tr>
-							<th class="">S/N</th>
-							<th class="">Clearance Type</th>
-							<th>Date Applied</th>
-							<th>Status</th>
-							<th>Info</th>
-							<th>Feedback</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php if ($result->num_rows > 0) :
-							$i = 1;
-						?>
-							<?php while ($row = $result->fetch_assoc()) : ?>
-								<tr>
-									<td class="table-plus"><?php echo $i++; ?></td>
-									<td><?php echo $row['clearance_type'] ?></td>
-									<td><?php echo ($row['date']) ?></td>
-									<td class="row" style="align-items: center;">
-										<div class="make-badge" style="<?php
-																		if ($row['status'] == "pending") {
-																			echo "background-color: yellow;";
-																		}
-																		if ($row['status'] == "approved") {
-																			echo "background-color: green;";
-																		}
-																		if ($row['status'] == "rejected") {
-																			echo "background-color: tomato;";
-																		}
 
-																		?>"> </div> <?php echo $row['status'] ?>
-									</td>
-									<td>
-										<a href="#" data-toggle="modal" data-target="<?php echo "#_".$row["id"]."clearance" ?>">
-											<i class="icon-copy bi bi-file-earmark-richtext" style="font-size: 25px;"></i>
-										</a>
-
-										<div>
-											<?php 
-											$id = $row['id'];
-											include "../staff/components/request/RequestModel.php";
-											?>
-										</div>
-									</td>
-									<td class="text-center">
-										<?php echo $row['feedback'] ?>
-									</td>
-								</tr>
-							<?php endwhile; ?>
-						<?php else : ?>
+		<div class="card-box pb-10">
+			<div class="h5 pd-20 mb-0">History</div>
+			<table class="table-striped table stripe hover nowrap text-center">
+				<thead>
+					<tr>
+						<th class="">S/N</th>
+						<th>Matric Num</th>
+						<th class="">Status</th>
+						<th>Date Applied</th>
+						<th>Documents</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php if ($result->num_rows > 0) :
+						$i = 1;
+					?>
+						<?php while ($row = $result->fetch_assoc()) : ?>
 							<tr>
-								<td colspan="6">You've not submitted any clearance...</td>
+								<td class="table-plus"><?php echo $i++; ?></td>
+								<td><?php echo $row['student_matric'] ?></td>
+								<td class="row" style="align-items: center; justify-content: center;">
+									<div class="make-badge" style="<?php
+																	if ($row['status'] == "pending") {
+																		echo "background-color: yellow;";
+																	}
+																	if ($row['status'] == "approved") {
+																		echo "background-color: green;";
+																	}
+																	if ($row['status'] == "rejected") {
+																		echo "background-color: tomato;";
+																	}
+
+																	?>"> </div> <?php echo $row['status'] ?>
+								</td>
+								<td class="" style="justify-content: center; text-align: center; align-items: center">
+									2024-03-02
+								</td>
+								<td>
+									<a href="#" data-toggle="modal" data-target="<?php echo "#_".$row["id"]."clearance" ?>">
+										<i class="icon-copy bi bi-file-earmark-richtext" style="font-size: 25px;"></i>
+									</a>
+
+
+									<?php
+									$id = $row['id'];
+									include "./components/request/RequestModel.php";
+									?>
+								</td>
 							</tr>
-						<?php endif; ?>
-
-					</tbody>
-				</table>
-			</div>
+						<?php endwhile; ?>
+					<?php else : ?>
+						<tr>
+							<td colspan="5">No records...</td>
+						</tr>
+					<?php endif; ?>
+				</tbody>
+			</table>
 		</div>
-
-
-
-
 
 
 		<div class="footer-wrap pd-20 mb-20 mt-5 card-box">
@@ -239,7 +269,10 @@ $data_json = json_encode($data);
 <script src="../vendors/scripts/process.js"></script>
 <script src="../vendors/scripts/layout-settings.js"></script>
 <script src="../src/plugins/apexcharts/apexcharts.min.js"></script>
-<!-- <script src="../vendors/scripts/apexcharts-setting.js"></script> -->
+<script src="../vendors/scripts/apexcharts-setting.js"></script>
+
+<!-- <script src="../vendors/scripts/dashboard3.js"></script> -->
+
 <script>
 	var data = <?php echo $data_json; ?>;
 
@@ -262,11 +295,11 @@ $data_json = json_encode($data);
 			}
 		}]
 	};
-	var chart = new ApexCharts(document.querySelector("#chartDashboard"), options8);
+	var chart = new ApexCharts(document.querySelector("#chartDashboardstaff"), options8);
 	chart.render();
 </script>
 
-<!-- <script src="../vendors/scripts/dashboard3.js"></script> -->
+
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NXZMQSS" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->

@@ -4,6 +4,7 @@ include '../../database.php';
 session_start();
 
 $student_matric = $_SESSION['matric_no'];
+$student_department = $_SESSION['department'];
 
 function handleFileProcessing($file_fields, &$fileError, &$fileMsg, &$student_matric, &$uploaded_file)
 {
@@ -61,12 +62,27 @@ if (isset($_POST['submit_bursary'])) {
     if (in_array(true, $fileError)) {
         exit();
     } else {
-        $sql = "INSERT INTO clearance (student_matric, convocation, testimonial, certificate, sta_of_result, cert_hold, status, clearance_type) VALUES ('$student_matric', '$uploaded_file[0]', '$uploaded_file[1]', '$uploaded_file[2]', '$uploaded_file[3]', '$uploaded_file[4]', '$status', '$clearance_type')";
 
-        if ($conn->query($sql) === TRUE) {
-            echo "New record created successfully";
+        $sql = "SELECT * FROM clearance WHERE student_matric = '$student_matric' AND clearance_type = '$clearance_type' AND status = 'rejected'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $sql = "UPDATE clearance SET convocation = '$uploaded_file[0]', testimonial = '$uploaded_file[1]', certificate = '$uploaded_file[2]', sta_of_result= '$uploaded_file[3]', cert_hold= '$uploaded_file[4]', status = '$status', feedback = ''  WHERE student_matric = '$student_matric'";
+            if ($conn->query($sql) === TRUE) {
+                echo "success";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+
+            $sql = "INSERT INTO clearance (student_matric, convocation, testimonial, certificate, sta_of_result, cert_hold, status, clearance_type, department) VALUES ('$student_matric', '$uploaded_file[0]', '$uploaded_file[1]', '$uploaded_file[2]', '$uploaded_file[3]', '$uploaded_file[4]', '$status', '$clearance_type', '$student_department')";
+    
+            if ($conn->query($sql) === TRUE) {
+                echo "New record created successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
         }
+
+
     }
 }
